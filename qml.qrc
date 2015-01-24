@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>images/geschwindigkeit.png</file>
+        <file>images/lautstaerke.png</file>
+        <file>content/fonts/Roboto-Thin.ttf</file>
+        <file>images/statusleiste.png</file>
+        <file>images/pause.png</file>
+        <file>images/play.png</file>
+        <file>images/statusleiste_dunkel.png</file>
+        <file>images/mikro_grey.png</file>
+        <file>images/guitar_grey.png</file>
+        <file>images/piano_grey.png</file>
+        <file>images/bass_grey.png</file>
+        <file>images/drums_grey.png</file>
+        <file>images/bass_selected.png</file>
+        <file>images/drums_selected.png</file>
+        <file>images/guitar_selected.png</file>
+        <file>images/mikro_selected.png</file>
+        <file>images/piano_selected.png</file>
+    </qresource>
+</RCC>
