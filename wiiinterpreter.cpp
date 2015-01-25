@@ -61,7 +61,7 @@ void wiiInterpreter::wiiLoop()
     m_wiimote->SetLEDs(0x0F);
 
     //Main loop
-    while(!m_wiimote->Button.Home())
+    while(true)
     {
 
         //Check Button Input

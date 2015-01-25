@@ -30,6 +30,12 @@ MediaPlayer::MediaPlayer()
 
     timeNextPrev = new QElapsedTimer();
     timeSpeed = new QElapsedTimer();
+
+    setVolume_bass(0);
+    setVolume_drums(0);
+    setVolume_guitar(0);
+    setVolume_piano(0);
+    setVolume_voice(0);
 }
 
 MediaPlayer::~MediaPlayer()
@@ -107,8 +113,6 @@ int MediaPlayer::getDuration()
 void MediaPlayer::playAllAudiotracks()
 {
     multitrack.setMultitrackAudio(playlist->currentIndex(), drums, guitar, piano, voice);
-    setMasterVolume(100);
-    setMasterVolume(-50);
 }
 
 /**
@@ -126,6 +130,11 @@ void MediaPlayer::start_pause()
         multitrack.setMultitrackAudio(playlist->currentIndex(), drums, guitar, piano, voice);
         // Damit beim neuen Lied auch alle dazugehörigen Tracks abgespielt werden
         connect(playlist, SIGNAL(currentIndexChanged(int)), SLOT(playAllAudiotracks()));
+        setVolume_bass(50);
+        setVolume_drums(50);
+        setVolume_guitar(50);
+        setVolume_piano(50);
+        setVolume_voice(50);
 
     }
     else if(bass.state()== QMediaPlayer::PlayingState){
@@ -197,7 +206,8 @@ void MediaPlayer::setMasterVolume(int value)
 
 void MediaPlayer::previousTrack()
 {
-    if(bass.state() == QMediaPlayer::PausedState)
+
+    if(bass.state() == QMediaPlayer::PausedState || bass.state()== QMediaPlayer::StoppedState)
     {
         start_pause();
     }
@@ -210,13 +220,16 @@ void MediaPlayer::previousTrack()
     else{
         playlist->previous();
     }
-    setMasterVolume(100);
-    setMasterVolume(-50);
+    setVolume_bass(50);
+    setVolume_drums(50);
+    setVolume_guitar(50);
+    setVolume_piano(50);
+    setVolume_voice(50);
 }
 
 void MediaPlayer::nextTrack()
 {
-    if(bass.state() == QMediaPlayer::PausedState)
+    if(bass.state() == QMediaPlayer::PausedState || bass.state()== QMediaPlayer::StoppedState)
     {
         start_pause();
     }
@@ -229,8 +242,11 @@ void MediaPlayer::nextTrack()
     else{
         playlist->next();
     }
-    setMasterVolume(100);
-    setMasterVolume(-50);
+    setVolume_bass(50);
+    setVolume_drums(50);
+    setVolume_guitar(50);
+    setVolume_piano(50);
+    setVolume_voice(50);
 }
 
 /**
@@ -322,7 +338,7 @@ float MediaPlayer::getSpeed()
 
 void MediaPlayer::updateSelected()
 {
-    if(isAPressed())return;
+    if(isAPressed() || bass.state()== QMediaPlayer::StoppedState)return;
 
     //Count the number of Tracks
     int trackCount = 0; // start with 2 for prev and next
@@ -509,6 +525,23 @@ int MediaPlayer::stateChanged()
         return s;
     }
     return 0;
+}
+
+int MediaPlayer::getAverageVolume()
+{
+    int avg = 0;
+    int c = 0;
+
+    for(int i=0; i < 5; i++)
+    {
+        if(volArray.volumes[i] > 0)
+        {
+            avg += volArray.volumes[i];
+            c++;
+        }
+    }
+    if(c == 0)return 0;
+    return max(0, min(100, avg/c));
 }
 
 bool MediaPlayer::isVoiceSelected()

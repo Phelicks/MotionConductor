@@ -54,6 +54,7 @@ public slots:
     bool isAPressed();
     int stateChanged();
     float getPlaybackRate();
+    int getAverageVolume();
 
 private slots:
     void updateSelected();

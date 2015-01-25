@@ -478,18 +478,18 @@ ApplicationWindow {
                             visibleBass = mediaPlayer.hasBass();
                             visibleDrums = mediaPlayer.hasDrums();
 
-                            progressStatusBar.value = progressStatusBar.value + 16;
+                            progressStatusBar.value = progressStatusBar.value + (16*mediaPlayer.getPlaybackRate());
 
  ///////////////////////////////////////////////////////////////////////////////////////////////////
                              //Angaben zu masterVolume
-                            //masterVolumeValue = mediaPlayer.getMasterVolume();//hier Methode von Felix die Wert der Wii fernbedienung liefert
+                            masterVolumeValue = mediaPlayer.getAverageVolume();//hier Methode von Felix die Wert der Wii fernbedienung liefert
                             //mediaPlayer.setMasterVolume(masterVolumeValue); //zusammen mit vorheriger Zeile "weg" kommentieren
 
                             // Angaben zu masterSpeed
-                            masterSpeedValue = mediaPlayer.getSpeed();//hier Methode von Felix die Wert der Wii fernbedienung liefert
                             //mediaPlayer.setPlaybackRate(masterSpeedValue); //zusammen mit vorheriger Zeile "weg" kommentieren
 
 
+                            masterSpeedValue = mediaPlayer.getSpeed();//hier Methode von Felix die Wert der Wii fernbedienung liefert
                             canvas.geschwText  = mediaPlayer.getPlaybackRate() + "x";//canvas.currentValue * 2 + "x";
 
                         }
@@ -1277,7 +1277,7 @@ ApplicationWindow {
         }
     }
 
-//Next and previous Track
+/*/Next and previous Track
     Rectangle{
         id: previousTrack
         opacity: 0.2
@@ -1370,6 +1370,6 @@ ApplicationWindow {
         }
     }
 
-
+*/
 }
 
