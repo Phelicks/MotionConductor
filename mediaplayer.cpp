@@ -11,7 +11,7 @@
  */
 MediaPlayer::MediaPlayer()
 {
-    QString path = "C:/Users/Phelicks/Desktop/WiiMote/AVPRG_MusicFiles/";
+    QString path = "./MusicFiles/";
     playlist = new QMediaPlaylist();
     playlist->addMedia(QUrl::fromLocalFile(path + "Actions_DevilsWords_bass.mp3")); // Track 1
     playlist->addMedia(QUrl::fromLocalFile(path + "Andrew Cole - Dead Rosees_bass.mp3")); // Track 2
@@ -28,8 +28,8 @@ MediaPlayer::MediaPlayer()
     connect(wiiInt, SIGNAL(stateChanged()), this, SLOT(updateSpeed()));
     connect(wiiInt, SIGNAL(statusMessage(QString)), this, SLOT(showStatus(QString)));
 
-    timeNextPrev = new QElapsedTimer();
-    timeSpeed = new QElapsedTimer();
+    timeNextPrev = QElapsedTimer();
+    timeSpeed = QElapsedTimer();
 
     setVolume_bass(0);
     setVolume_drums(0);
@@ -41,6 +41,7 @@ MediaPlayer::MediaPlayer()
 MediaPlayer::~MediaPlayer()
 {
     delete wiiInt;
+    delete playlist;
 }
 
 /**
@@ -330,6 +331,7 @@ int MediaPlayer::getArrayVolume(int i)
 
 float MediaPlayer::getSpeed()
 {
+    if(wiiInt->m_wiimote == 0)return 1;
     float p = wiiInt->getValue(wiiInt->m_wiimote->Acceleration.X, -1.0, 1.0, 1.0);
     //int h = p*10.0;
     //qDebug() << h/10.0;
@@ -413,12 +415,12 @@ void MediaPlayer::updateSelected()
     if(currentDeg < -90 || currentDeg > 90)
     {
         if(!isOnNextPrev){
-            timeNextPrev->start();
+            timeNextPrev.start();
             //qDebug() << "Timer started";
         }
         else
         {
-            int elapsed = timeNextPrev->elapsed();
+            int elapsed = timeNextPrev.elapsed();
             if(elapsed > 1000 && elapsed < 1200)
             {
                 wiiInt->m_wiimote->SetRumble(true);
@@ -456,21 +458,23 @@ void MediaPlayer::updateSelected()
 
 void MediaPlayer::updateMasterVolume()
 {
+    if(wiiInt->m_wiimote == 0)return;
     if(wiiInt->m_wiimote->Button.A())return;
-    float acc = -wiiInt->m_wiimote->Acceleration.Y;
-    if(acc > 0.8)
-    {
-        setMasterVolume(1);
-    }
-
-    if(acc < -0.8)
+    float ori = -wiiInt->m_wiimote->Acceleration.Orientation.Pitch;
+    if(ori > 70)
     {
         setMasterVolume(-1);
+    }
+
+    if(ori < -80)
+    {
+        setMasterVolume(1);
     }
 }
 
 void MediaPlayer::updatePlayStatus()
 {
+    if(wiiInt->m_wiimote == 0)return;
     if(wiiInt->m_wiimote->Button.B())
     {
         if(!playStatus)
@@ -491,10 +495,10 @@ void MediaPlayer::updateSpeed()
     {
         if(!speedStarted)
         {
-            timeSpeed->start();
+            timeSpeed.start();
             speedStarted = true;
         }
-        if(timeSpeed->elapsed() > 1000)
+        if(timeSpeed.elapsed() > 1000)
         {
             if(!speedSet)
             {
@@ -518,6 +522,7 @@ void MediaPlayer::updateSpeed()
 
 int MediaPlayer::stateChanged()
 {
+    if(wiiInt->m_wiimote == 0)return 0;
     if(playState != 0){
         int s = playState;
         playState = 0;
@@ -571,6 +576,7 @@ bool MediaPlayer::isDrumsSelected()
 
 bool MediaPlayer::isAPressed()
 {
+    if(wiiInt->m_wiimote == 0)return 0;
     return wiiInt->m_wiimote->Button.A();
 }
 

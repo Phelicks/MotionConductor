@@ -107,7 +107,7 @@ void wiiInterpreter::wiiLoop()
         {
            log("More than one point");
         }
-        else if(dotX > 0.4 && dotX < 0.6)
+        else if(mode != 2 && dotX > 0.4 && dotX < 0.6)
         {
            degrees = 0;
            if(mode == 3)m_wiimote->SetRumble(true);

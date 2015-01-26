@@ -27,7 +27,7 @@ private:
     QString artistName;
     QString trackName;
     struct instrumentsArray i;
-    QString path = "C:/Users/Phelicks/Desktop/WiiMote/AVPRG_MusicFiles/";
+    QString path = "./MusicFiles/";
 };
 
 #endif // AUDIOTRACKS_H

@@ -76,12 +76,12 @@ private:
     long long timerTrueForAWhile;
     wiiInterpreter *wiiInt;
     int selected = 0;
-    QElapsedTimer *timeNextPrev;
+    QElapsedTimer timeNextPrev;
     bool isOnNextPrev = false;
     bool nextSelected = false;
     bool playStatus = false;
     int playState = 0;
-    QElapsedTimer *timeSpeed;
+    QElapsedTimer timeSpeed;
     bool speedStarted = false;
     bool speedSet = false;
     float playbackRate = 1.0;
